@@ -1,33 +1,31 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"sync"
+	"time"
 )
 
-func min(num1 int, num2 int) int {
-	if num1 > num2 {
-		return num2
-	} else {
-		return num1
-	}
-}
+var wg sync.WaitGroup
 
 func main() {
-	var n int
-	fmt.Scanln(&n)
+	wg.Add(1)
+	ctx, cancel := context.WithCancel(context.Background())
+	go PrintEverySecond(ctx)
+	time.Sleep(5 * time.Second)
+	cancel()
+}
 
-	// dp[n] = min(dp[n], dp[n-제곱수] + 1)
-	// 처음에 dp[n] = n 으로 초기화
-	var dp [100001]int
-	for i := 0; i <= 100000; i++ {
-		dp[i] = i
-	}
-
-	for i := 1; i <= n; i++ {
-		for j := 1; j*j <= i; j++ {
-			dp[i] = min(dp[i], dp[i-j*j]+1)
+func PrintEverySecond(ctx context.Context) {
+	tick := time.Tick(time.Second)
+	for {
+		select {
+		case <-ctx.Done():
+			wg.Done()
+			return
+		case <-tick:
+			fmt.Println("Tick")
 		}
 	}
-
-	fmt.Println(dp[n])
 }
