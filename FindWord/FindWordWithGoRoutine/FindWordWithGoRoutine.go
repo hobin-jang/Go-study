@@ -23,10 +23,10 @@ type FindInfo struct {
 func main() {
 
 	// goroutine 써서 여러 파일 동시 처리
-	// 입력 예시 : ./FidnWord brother *.txt
+	// 입력 예시 : ./FidnWordWithGoRoutine brother *.txt
 
 	if len(os.Args) < 3 {
-		fmt.Println("it needs more than 2 parameters : ex. FindWord word filePattern")
+		fmt.Println("it needs more than 2 parameters : ex. FindWordWithGoRoutine word filePattern")
 		return
 	}
 
